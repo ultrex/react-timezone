@@ -2,7 +2,7 @@
   "name": "react-timezone",
   "version": "0.0.1",
   "description": "React timezone picker",
-  "main": "src/index.js",
+  "main": "build/react-timezone.js",
   "scripts": {
     "build": "webpack && webpack -p --minify"
   },
