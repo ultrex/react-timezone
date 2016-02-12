@@ -2,7 +2,7 @@
 > Timezone Picker for React
 
 ##Demo
-[Available here.](http://vahagnaharonian.github.io/react-timezone/demo/)
+[Available here.](http://vahnag.github.io/react-timezone/demo/)
 
 ##Installation
 Should prefer installing via NPM:
