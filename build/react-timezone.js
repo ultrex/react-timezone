@@ -122,14 +122,14 @@ return /******/ (function(modules) { // webpackBootstrap
 				var isSelected = !this.state.open && value;
 				var isOpen = this.state.open;
 
-				return React.createElement(
+				return _react2.default.createElement(
 					'div',
 					{ className: (0, _classnames2.default)('timezone-picker', { 'timezone-picker-open': isOpen, 'timezone-picker-selected': isSelected }, this.props.className),
 						style: this.props.style },
-					React.createElement(
+					_react2.default.createElement(
 						'div',
 						{ className: 'timezone-picker-textfield' },
-						React.createElement('input', { type: 'text',
+						_react2.default.createElement('input', { type: 'text',
 							placeholder: this.props.placeholder,
 							onFocus: this.handleFocus.bind(this),
 							onBlur: this.handleBlur.bind(this),
@@ -138,12 +138,12 @@ return /******/ (function(modules) { // webpackBootstrap
 							defaultValue: value,
 							ref: 'field' })
 					),
-					React.createElement(
+					_react2.default.createElement(
 						'ul',
 						{ className: 'timezone-picker-list', ref: 'options' },
 						this.state.timezones.map(function (zone, index) {
 							var focused = _this2.state.focused === index + 1;
-							return React.createElement(
+							return _react2.default.createElement(
 								'li',
 								{ key: index, title: zone,
 									onMouseDown: _this2.handleSelect.bind(_this2, index),
@@ -244,7 +244,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		}]);
 
 		return TimezonePicker;
-	})(React.Component);
+	})(_react2.default.Component);
 
 	exports.default = TimezonePicker;
 

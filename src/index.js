@@ -1,6 +1,6 @@
 import './styles.styl';
 
-import react from 'react';
+import React from 'react';
 import classNames from 'classnames';
 
 import timezones from './timezones.json';
