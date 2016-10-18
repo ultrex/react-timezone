@@ -74,10 +74,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	__webpack_require__(3);
 
-	var _timezones = __webpack_require__(7);
-
-	var _timezones2 = _interopRequireDefault(_timezones);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -94,7 +90,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, (TimezonePicker.__proto__ || Object.getPrototypeOf(TimezonePicker)).call(this, props));
 
-	    _this.timezones = Object.keys(_timezones2.default);
+	    _this.timezones = Object.keys(props.timezones);
 
 	    _this.state = {
 	      open: false,
@@ -117,9 +113,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'getTimezone',
 	    value: function getTimezone(query) {
+	      var _this2 = this;
+
 	      if (!query) return null;
 	      return this.timezones.find(function (zone) {
-	        return query === _timezones2.default[zone] || query === zone;
+	        return query === _this2.props.timezones[zone] || query === zone;
 	      });
 	    }
 	  }, {
@@ -199,7 +197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 
 	      if (this.props.onChange) {
-	        this.props.onChange(_timezones2.default[this.state.timezones[index]]);
+	        this.props.onChange(this.props.timezones[this.state.timezones[index]]);
 	      } else {
 	        this.field.value = this.state.timezones[index];
 	        this.setState({ value: this.state.timezones[index] });
@@ -211,12 +209,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var currentValue = this.state.value;
 	      if (!currentValue) return null;
 
-	      return _timezones2.default[currentValue];
+	      return this.props.timezones[currentValue];
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      var inputProps = this.props.inputProps;
 
@@ -240,37 +238,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	          _react2.default.createElement('input', _extends({
 	            type: 'text',
 	            onFocus: function onFocus(e) {
-	              return _this2.handleFocus(e);
+	              return _this3.handleFocus(e);
 	            },
 	            onBlur: function onBlur(e) {
-	              return _this2.handleBlur(e);
+	              return _this3.handleBlur(e);
 	            },
 	            onChange: function onChange(e) {
-	              return _this2.handleFilterChange(e);
+	              return _this3.handleFilterChange(e);
 	            },
 	            onKeyDown: function onKeyDown(e) {
-	              return _this2.handleKeyPress(e);
+	              return _this3.handleKeyPress(e);
 	            },
 	            defaultValue: value,
 	            ref: function ref(field) {
-	              _this2.field = field;
+	              _this3.field = field;
 	            }
 	          }, inputProps))
 	        ),
 	        _react2.default.createElement(
 	          'ul',
 	          { className: 'timezone-picker-list', ref: function ref(options) {
-	              _this2.options = options;
+	              _this3.options = options;
 	            } },
 	          this.state.timezones.map(function (zone, index) {
-	            var focused = _this2.state.focused === index + 1;
+	            var focused = _this3.state.focused === index + 1;
 	            return _react2.default.createElement(
 	              'li',
 	              {
 	                key: index,
 	                title: zone,
 	                onMouseDown: function onMouseDown() {
-	                  return _this2.handleSelect(index);
+	                  return _this3.handleSelect(index);
 	                },
 	                className: (0, _classnames2.default)('timezone-picker-list-item', { 'timezone-picker-list-item-active': focused })
 	              },
@@ -294,11 +292,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  onChange: _react.PropTypes.func,
 	  className: _react.PropTypes.string,
 	  style: _react.PropTypes.object, // eslint-disable-line
-	  inputProps: _react.PropTypes.object };
+	  inputProps: _react.PropTypes.object, // eslint-disable-line
+	  timezones: _react.PropTypes.object };
 
 	TimezonePicker.defaultProps = {
-	  inputProps: {}
-	};
+	  inputProps: {},
+	  timezones: __webpack_require__(7) };
 
 /***/ },
 /* 1 */

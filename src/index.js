@@ -3,12 +3,10 @@ import classNames from 'classnames';
 
 import './styles.styl';
 
-import timezones from './timezones.json';
-
 export default class TimezonePicker extends React.Component {
   constructor(props) {
     super(props);
-    this.timezones = Object.keys(timezones);
+    this.timezones = Object.keys(props.timezones);
 
     this.state = {
       open: false,
@@ -26,7 +24,7 @@ export default class TimezonePicker extends React.Component {
   }
   getTimezone(query) {
     if (!query) return null;
-    return this.timezones.find(zone => query === timezones[zone] || query === zone);
+    return this.timezones.find(zone => query === this.props.timezones[zone] || query === zone);
   }
   filterItems(filter) {
     if (!filter.trim() === '') return () => true;
@@ -89,7 +87,7 @@ export default class TimezonePicker extends React.Component {
     });
 
     if (this.props.onChange) {
-      this.props.onChange(timezones[this.state.timezones[index]]);
+      this.props.onChange(this.props.timezones[this.state.timezones[index]]);
     } else {
       this.field.value = this.state.timezones[index];
       this.setState({ value: this.state.timezones[index] });
@@ -99,7 +97,7 @@ export default class TimezonePicker extends React.Component {
     const currentValue = this.state.value;
     if (!currentValue) return null;
 
-    return timezones[currentValue];
+    return this.props.timezones[currentValue];
   }
   render() {
     const { inputProps } = this.props;
@@ -165,9 +163,10 @@ TimezonePicker.propTypes = {
   className: PropTypes.string,
   style: PropTypes.object, // eslint-disable-line
   inputProps: PropTypes.object, // eslint-disable-line
+  timezones: PropTypes.object, // eslint-disable-line
 };
 
 TimezonePicker.defaultProps = {
   inputProps: {},
+  timezones: require('./timezones.json'), // eslint-disable-line
 };
-
