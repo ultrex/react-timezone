@@ -60,6 +60,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
@@ -132,24 +134,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'handleFocus',
-	    value: function handleFocus() {
+	    value: function handleFocus(e) {
 	      this.field.value = '';
 	      this.setState({ open: true });
+
+	      if (typeof this.props.inputProps.onFocus === 'function') {
+	        this.props.inputProps.onFocus(e);
+	      }
 	    }
 	  }, {
 	    key: 'handleBlur',
-	    value: function handleBlur() {
+	    value: function handleBlur(e) {
 	      this.field.value = this.state.value || '';
 	      this.setState({ open: false });
+
+	      if (typeof this.props.inputProps.onBlur === 'function') {
+	        this.props.inputProps.onBlur(e);
+	      }
 	    }
 	  }, {
 	    key: 'handleFilterChange',
-	    value: function handleFilterChange() {
+	    value: function handleFilterChange(e) {
 	      var filter = this.field.value.trim();
 	      this.setState({
 	        timezones: this.timezones.filter(this.filterItems(filter)),
 	        focused: 0
 	      });
+
+	      if (typeof this.props.inputProps.onChange === 'function') {
+	        this.props.inputProps.onChange(e);
+	      }
 	    }
 	  }, {
 	    key: 'handleKeyPress',
@@ -204,6 +218,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function render() {
 	      var _this2 = this;
 
+	      var inputProps = this.props.inputProps;
+
 	      var value = this.state.value;
 
 	      var isSelected = !this.state.open && value;
@@ -221,17 +237,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'timezone-picker-textfield' },
-	          _react2.default.createElement('input', {
+	          _react2.default.createElement('input', _extends({
 	            type: 'text',
-	            placeholder: this.props.placeholder,
-	            onFocus: function onFocus() {
-	              return _this2.handleFocus();
+	            onFocus: function onFocus(e) {
+	              return _this2.handleFocus(e);
 	            },
-	            onBlur: function onBlur() {
-	              return _this2.handleBlur();
+	            onBlur: function onBlur(e) {
+	              return _this2.handleBlur(e);
 	            },
-	            onChange: function onChange() {
-	              return _this2.handleFilterChange();
+	            onChange: function onChange(e) {
+	              return _this2.handleFilterChange(e);
 	            },
 	            onKeyDown: function onKeyDown(e) {
 	              return _this2.handleKeyPress(e);
@@ -240,7 +255,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            ref: function ref(field) {
 	              _this2.field = field;
 	            }
-	          })
+	          }, inputProps))
 	        ),
 	        _react2.default.createElement(
 	          'ul',
@@ -279,7 +294,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  onChange: _react.PropTypes.func,
 	  className: _react.PropTypes.string,
 	  style: _react.PropTypes.object, // eslint-disable-line
-	  placeholder: _react.PropTypes.string
+	  inputProps: _react.PropTypes.object };
+
+	TimezonePicker.defaultProps = {
+	  inputProps: {}
 	};
 
 /***/ },

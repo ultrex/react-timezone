@@ -32,20 +32,32 @@ export default class TimezonePicker extends React.Component {
     if (!filter.trim() === '') return () => true;
     return zone => zone.toLowerCase().includes(filter.toLowerCase().replace(/\s/g, ''));
   }
-  handleFocus() {
+  handleFocus(e) {
     this.field.value = '';
     this.setState({ open: true });
+
+    if (typeof this.props.inputProps.onFocus === 'function') {
+      this.props.inputProps.onFocus(e);
+    }
   }
-  handleBlur() {
+  handleBlur(e) {
     this.field.value = this.state.value || '';
     this.setState({ open: false });
+
+    if (typeof this.props.inputProps.onBlur === 'function') {
+      this.props.inputProps.onBlur(e);
+    }
   }
-  handleFilterChange() {
+  handleFilterChange(e) {
     const filter = this.field.value.trim();
     this.setState({
       timezones: this.timezones.filter(this.filterItems(filter)),
       focused: 0,
     });
+
+    if (typeof this.props.inputProps.onChange === 'function') {
+      this.props.inputProps.onChange(e);
+    }
   }
   handleKeyPress(e) {
     if (e.which === 38 || e.which === 40) {
@@ -90,6 +102,7 @@ export default class TimezonePicker extends React.Component {
     return timezones[currentValue];
   }
   render() {
+    const { inputProps } = this.props;
     const value = this.state.value;
 
     const isSelected = !this.state.open && value;
@@ -111,13 +124,13 @@ export default class TimezonePicker extends React.Component {
         <div className="timezone-picker-textfield">
           <input
             type="text"
-            placeholder={this.props.placeholder}
-            onFocus={() => this.handleFocus()}
-            onBlur={() => this.handleBlur()}
-            onChange={() => this.handleFilterChange()}
+            onFocus={e => this.handleFocus(e)}
+            onBlur={e => this.handleBlur(e)}
+            onChange={e => this.handleFilterChange(e)}
             onKeyDown={e => this.handleKeyPress(e)}
             defaultValue={value}
             ref={(field) => { this.field = field; }}
+            {...inputProps}
           />
         </div>
         <ul className="timezone-picker-list" ref={(options) => { this.options = options; }}>
@@ -151,5 +164,10 @@ TimezonePicker.propTypes = {
   onChange: PropTypes.func,
   className: PropTypes.string,
   style: PropTypes.object, // eslint-disable-line
-  placeholder: PropTypes.string,
+  inputProps: PropTypes.object, // eslint-disable-line
 };
+
+TimezonePicker.defaultProps = {
+  inputProps: {},
+};
+

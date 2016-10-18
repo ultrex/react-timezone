@@ -5,7 +5,8 @@
   "main": "build/react-timezone.js",
   "scripts": {
     "build": "webpack && webpack -p --minify",
-    "lint": "eslint webpack.config.js src"
+    "lint": "eslint webpack.config.js src",
+    "prepublish": "npm run lint && npm run build"
   },
   "author": "Vahagn Aharonian <vahagn.aharonian@gmail.com>",
   "license": "MIT",
