@@ -2,7 +2,7 @@
   "name": "react-timezone",
   "version": "0.0.3",
   "description": "React timezone picker",
-  "main": "build/react-timezone.js",
+  "main": "build/react-timezone.min.js",
   "scripts": {
     "build": "webpack && webpack -p --minify",
     "lint": "eslint webpack.config.js src",
@@ -28,8 +28,7 @@
     "webpack": "^1.12.9"
   },
   "peerDependencies": {
-    "react": "^0.14.3 || ^15.0.0",
-    "react-dom": "^0.14.3 || ^15.0.0"
+    "react": "^0.14.3 || ^15.0.0"
   },
   "dependencies": {
     "classnames": "^2.2.1"
