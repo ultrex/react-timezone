@@ -7,7 +7,7 @@
 		exports["ReactTimezone"] = factory(require("react"));
 	else
 		root["ReactTimezone"] = factory(root["React"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_5__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_1__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -56,21 +56,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 
-	__webpack_require__(1);
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _react = __webpack_require__(5);
+	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(6);
+	var _classnames = __webpack_require__(2);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
+
+	__webpack_require__(3);
 
 	var _timezones = __webpack_require__(7);
 
@@ -84,181 +84,275 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var TimezonePicker = (function (_React$Component) {
-		_inherits(TimezonePicker, _React$Component);
+	var TimezonePicker = function (_React$Component) {
+	  _inherits(TimezonePicker, _React$Component);
 
-		function TimezonePicker(props) {
-			_classCallCheck(this, TimezonePicker);
+	  function TimezonePicker(props) {
+	    _classCallCheck(this, TimezonePicker);
 
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TimezonePicker).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (TimezonePicker.__proto__ || Object.getPrototypeOf(TimezonePicker)).call(this, props));
 
-			_this.timezones = Object.keys(_timezones2.default);
+	    _this.timezones = Object.keys(_timezones2.default);
 
-			_this.state = {
-				open: false,
-				timezones: _this.timezones,
-				focused: 0,
-				value: _this.getTimezone(props.defaultValue || props.value)
-			};
-			return _this;
-		}
+	    _this.state = {
+	      open: false,
+	      timezones: _this.timezones,
+	      focused: 0,
+	      value: _this.getTimezone(props.defaultValue || props.value)
+	    };
+	    return _this;
+	  }
 
-		_createClass(TimezonePicker, [{
-			key: 'componentWillReceiveProps',
-			value: function componentWillReceiveProps(nextProps) {
-				if (nextProps.value !== this.props.value) {
-					var newValue = this.getTimezone(nextProps.value);
-					this.refs.field.value = newValue || '';
-					this.setState({ value: newValue });
-				}
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				var _this2 = this;
+	  _createClass(TimezonePicker, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.value !== this.props.value) {
+	        var newValue = this.getTimezone(nextProps.value);
+	        this.field.value = newValue || '';
+	        this.setState({ value: newValue });
+	      }
+	    }
+	  }, {
+	    key: 'getTimezone',
+	    value: function getTimezone(query) {
+	      if (!query) return null;
+	      return this.timezones.find(function (zone) {
+	        return query === _timezones2.default[zone] || query === zone;
+	      });
+	    }
+	  }, {
+	    key: 'filterItems',
+	    value: function filterItems(filter) {
+	      if (!filter.trim() === '') return function () {
+	        return true;
+	      };
+	      return function (zone) {
+	        return zone.toLowerCase().includes(filter.toLowerCase().replace(/\s/g, ''));
+	      };
+	    }
+	  }, {
+	    key: 'handleFocus',
+	    value: function handleFocus() {
+	      this.field.value = '';
+	      this.setState({ open: true });
+	    }
+	  }, {
+	    key: 'handleBlur',
+	    value: function handleBlur() {
+	      this.field.value = this.state.value || '';
+	      this.setState({ open: false });
+	    }
+	  }, {
+	    key: 'handleFilterChange',
+	    value: function handleFilterChange() {
+	      var filter = this.field.value.trim();
+	      this.setState({
+	        timezones: this.timezones.filter(this.filterItems(filter)),
+	        focused: 0
+	      });
+	    }
+	  }, {
+	    key: 'handleKeyPress',
+	    value: function handleKeyPress(e) {
+	      if (e.which === 38 || e.which === 40) {
+	        e.preventDefault();
+	        var focused = this.state.focused;
+	        if (e.which === 38) {
+	          focused -= 1;
+	          if (focused < 1) focused = this.state.timezones.length;
+	        } else {
+	          focused += 1;
+	          if (focused > this.state.timezones.length) focused = 1;
+	        }
+	        this.setState({ focused: focused });
+	        this.options.children[focused - 1].scrollIntoView();
+	      } else if (this.state.focused !== 0) {
+	        if (e.which === 13) {
+	          this.handleSelect(this.state.focused - 1);
+	          e.target.blur();
+	        } else {
+	          this.setState({ focused: 0 });
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'handleSelect',
+	    value: function handleSelect(index) {
+	      this.setState({
+	        timezones: this.timezones,
+	        focused: 0,
+	        open: false
+	      });
 
-				var value = this.state.value;
+	      if (this.props.onChange) {
+	        this.props.onChange(_timezones2.default[this.state.timezones[index]]);
+	      } else {
+	        this.field.value = this.state.timezones[index];
+	        this.setState({ value: this.state.timezones[index] });
+	      }
+	    }
+	  }, {
+	    key: 'value',
+	    value: function value() {
+	      var currentValue = this.state.value;
+	      if (!currentValue) return null;
 
-				var isSelected = !this.state.open && value;
-				var isOpen = this.state.open;
+	      return _timezones2.default[currentValue];
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
 
-				return _react2.default.createElement(
-					'div',
-					{ className: (0, _classnames2.default)('timezone-picker', { 'timezone-picker-open': isOpen, 'timezone-picker-selected': isSelected }, this.props.className),
-						style: this.props.style },
-					_react2.default.createElement(
-						'div',
-						{ className: 'timezone-picker-textfield' },
-						_react2.default.createElement('input', { type: 'text',
-							placeholder: this.props.placeholder,
-							onFocus: this.handleFocus.bind(this),
-							onBlur: this.handleBlur.bind(this),
-							onChange: this.handleFilterChange.bind(this),
-							onKeyDown: this.handleKeyPress.bind(this),
-							defaultValue: value,
-							ref: 'field' })
-					),
-					_react2.default.createElement(
-						'ul',
-						{ className: 'timezone-picker-list', ref: 'options' },
-						this.state.timezones.map(function (zone, index) {
-							var focused = _this2.state.focused === index + 1;
-							return _react2.default.createElement(
-								'li',
-								{ key: index, title: zone,
-									onMouseDown: _this2.handleSelect.bind(_this2, index),
-									className: (0, _classnames2.default)('timezone-picker-list-item', { 'timezone-picker-list-item-active': focused }) },
-								zone
-							);
-						})
-					)
-				);
-			}
-		}, {
-			key: 'getTimezone',
-			value: function getTimezone(query) {
-				if (!query) return null;
-				return this.timezones.find(function (zone) {
-					return query === _timezones2.default[zone] || query === zone;
-				});
-			}
-		}, {
-			key: 'filterItems',
-			value: function filterItems(filter) {
-				if (!filter.trim() === '') return function () {
-					return true;
-				};
-				return function (zone) {
-					return zone.toLowerCase().includes(filter.toLowerCase().replace(/\s/g, ''));
-				};
-			}
-		}, {
-			key: 'handleFocus',
-			value: function handleFocus() {
-				this.refs.field.value = '';
-				this.setState({ open: true });
-			}
-		}, {
-			key: 'handleBlur',
-			value: function handleBlur() {
-				this.refs.field.value = this.state.value || '';
-				this.setState({ open: false });
-			}
-		}, {
-			key: 'handleFilterChange',
-			value: function handleFilterChange() {
-				var filter = this.refs.field.value.trim();
-				this.setState({
-					timezones: this.timezones.filter(this.filterItems(filter)),
-					focused: 0
-				});
-			}
-		}, {
-			key: 'handleKeyPress',
-			value: function handleKeyPress(e) {
-				if (e.which === 38 || e.which === 40) {
-					e.preventDefault();
-					var focused = this.state.focused;
-					if (e.which === 38) {
-						focused -= 1;
-						if (focused < 1) focused = this.state.timezones.length;
-					} else {
-						focused += 1;
-						if (focused > this.state.timezones.length) focused = 1;
-					}
-					this.setState({ focused: focused });
-					this.refs.options.children[focused - 1].scrollIntoView();
-				} else if (this.state.focused !== 0) {
-					if (e.which === 13) {
-						this.handleSelect(this.state.focused - 1);
-						e.target.blur();
-					} else {
-						this.setState({ focused: 0 });
-					}
-				}
-			}
-		}, {
-			key: 'handleSelect',
-			value: function handleSelect(index) {
-				this.setState({
-					timezones: this.timezones,
-					focused: 0,
-					open: false
-				});
+	      var value = this.state.value;
 
-				if (this.props.onChange) {
-					this.props.onChange(_timezones2.default[this.state.timezones[index]]);
-				} else {
-					this.refs.field.value = this.state.timezones[index];
-					this.setState({ value: this.state.timezones[index] });
-				}
-			}
-		}, {
-			key: 'value',
-			value: function value() {
-				var currentValue = this.state.value;
-				if (!currentValue) return null;
+	      var isSelected = !this.state.open && value;
+	      var isOpen = this.state.open;
 
-				return _timezones2.default[currentValue];
-			}
-		}]);
+	      return _react2.default.createElement(
+	        'div',
+	        {
+	          className: (0, _classnames2.default)('timezone-picker', {
+	            'timezone-picker-open': isOpen,
+	            'timezone-picker-selected': isSelected
+	          }, this.props.className),
+	          style: this.props.style
+	        },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'timezone-picker-textfield' },
+	          _react2.default.createElement('input', {
+	            type: 'text',
+	            placeholder: this.props.placeholder,
+	            onFocus: function onFocus() {
+	              return _this2.handleFocus();
+	            },
+	            onBlur: function onBlur() {
+	              return _this2.handleBlur();
+	            },
+	            onChange: function onChange() {
+	              return _this2.handleFilterChange();
+	            },
+	            onKeyDown: function onKeyDown(e) {
+	              return _this2.handleKeyPress(e);
+	            },
+	            defaultValue: value,
+	            ref: function ref(field) {
+	              _this2.field = field;
+	            }
+	          })
+	        ),
+	        _react2.default.createElement(
+	          'ul',
+	          { className: 'timezone-picker-list', ref: function ref(options) {
+	              _this2.options = options;
+	            } },
+	          this.state.timezones.map(function (zone, index) {
+	            var focused = _this2.state.focused === index + 1;
+	            return _react2.default.createElement(
+	              'li',
+	              {
+	                key: index,
+	                title: zone,
+	                onMouseDown: function onMouseDown() {
+	                  return _this2.handleSelect(index);
+	                },
+	                className: (0, _classnames2.default)('timezone-picker-list-item', { 'timezone-picker-list-item-active': focused })
+	              },
+	              zone
+	            );
+	          })
+	        )
+	      );
+	    }
+	  }]);
 
-		return TimezonePicker;
-	})(_react2.default.Component);
+	  return TimezonePicker;
+	}(_react2.default.Component);
 
 	exports.default = TimezonePicker;
 
+
+	TimezonePicker.propTypes = {
+	  defaultValue: _react.PropTypes.string,
+	  value: _react.PropTypes.string,
+	  onChange: _react.PropTypes.func,
+	  className: _react.PropTypes.string,
+	  style: _react.PropTypes.object, // eslint-disable-line
+	  placeholder: _react.PropTypes.string
+	};
+
 /***/ },
 /* 1 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+
+	(function () {
+		'use strict';
+
+		var hasOwn = {}.hasOwnProperty;
+
+		function classNames () {
+			var classes = [];
+
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+
+				var argType = typeof arg;
+
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+
+			return classes.join(' ');
+		}
+
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
+
+/***/ },
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(2);
+	var content = __webpack_require__(4);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(4)(content, {});
+	var update = __webpack_require__(6)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -275,10 +369,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 2 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(3)();
+	exports = module.exports = __webpack_require__(5)();
 	// imports
 
 
@@ -289,7 +383,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 3 */
+/* 5 */
 /***/ function(module, exports) {
 
 	/*
@@ -345,7 +439,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 4 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -561,7 +655,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	function applyToTag(styleElement, obj) {
 		var css = obj.css;
 		var media = obj.media;
-		var sourceMap = obj.sourceMap;
 
 		if(media) {
 			styleElement.setAttribute("media", media)
@@ -579,7 +672,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function updateLink(linkElement, obj) {
 		var css = obj.css;
-		var media = obj.media;
 		var sourceMap = obj.sourceMap;
 
 		if(sourceMap) {
@@ -596,66 +688,6 @@ return /******/ (function(modules) { // webpackBootstrap
 		if(oldSrc)
 			URL.revokeObjectURL(oldSrc);
 	}
-
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_5__;
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2015 Jed Watson.
-	  Licensed under the MIT License (MIT), see
-	  http://jedwatson.github.io/classnames
-	*/
-	/* global define */
-
-	(function () {
-		'use strict';
-
-		var hasOwn = {}.hasOwnProperty;
-
-		function classNames () {
-			var classes = '';
-
-			for (var i = 0; i < arguments.length; i++) {
-				var arg = arguments[i];
-				if (!arg) continue;
-
-				var argType = typeof arg;
-
-				if (argType === 'string' || argType === 'number') {
-					classes += ' ' + arg;
-				} else if (Array.isArray(arg)) {
-					classes += ' ' + classNames.apply(null, arg);
-				} else if (argType === 'object') {
-					for (var key in arg) {
-						if (hasOwn.call(arg, key) && arg[key]) {
-							classes += ' ' + key;
-						}
-					}
-				}
-			}
-
-			return classes.substr(1);
-		}
-
-		if (typeof module !== 'undefined' && module.exports) {
-			module.exports = classNames;
-		} else if (true) {
-			// register as 'classnames', consistent with npm package name
-			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
-				return classNames;
-			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		} else {
-			window.classNames = classNames;
-		}
-	}());
 
 
 /***/ },
