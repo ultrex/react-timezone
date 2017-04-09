@@ -121,6 +121,7 @@ export default class TimezonePicker extends React.Component {
       >
         <div className="timezone-picker-textfield">
           <input
+            disabled={this.props.disabled}
             type="text"
             onFocus={e => this.handleFocus(e)}
             onBlur={e => this.handleBlur(e)}
@@ -158,6 +159,7 @@ export default class TimezonePicker extends React.Component {
 
 TimezonePicker.propTypes = {
   defaultValue: PropTypes.string,
+  disabled: PropTypes.bool,
   value: PropTypes.string,
   onChange: PropTypes.func,
   className: PropTypes.string,
@@ -167,6 +169,7 @@ TimezonePicker.propTypes = {
 };
 
 TimezonePicker.defaultProps = {
+  disabled: false,
   inputProps: {},
   timezones: require('./timezones.json'), // eslint-disable-line
 };
