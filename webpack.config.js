@@ -1,44 +1,43 @@
 const path = require('path');
 
-const minify = process.argv.indexOf('--minify') !== -1;
-
-module.exports = {
-  entry: './src/index.js',
-  output: {
-    path: path.resolve(__dirname, 'build'),
-    filename: minify ? 'react-timezone.min.js' : 'react-timezone.js',
-    library: 'ReactTimezone',
-    libraryTarget: 'umd',
-  },
-  externals: [
-    {
-      react: {
-        root: 'React',
-        commonjs2: 'react',
-        commonjs: 'react',
-        amd: 'react',
-      },
+module.exports = function webpackConfig(env) {
+  return {
+    entry: './src/index.js',
+    output: {
+      path: path.resolve(__dirname, 'build'),
+      filename: env && env.minify ? 'react-timezone.min.js' : 'react-timezone.js',
+      library: 'ReactTimezone',
+      libraryTarget: 'umd',
     },
-  ],
-  module: {
-    loaders: [
+    externals: [
       {
-        test: /\.js$/,
-        loader: 'babel',
-        exclude: /node_modules/,
-        query: {
-          presets: ['react', 'es2015'],
+        react: {
+          root: 'React',
+          commonjs2: 'react',
+          commonjs: 'react',
+          amd: 'react',
         },
       },
-      {
-        test: /\.json$/,
-        loader: 'json',
-      },
-      {
-        test: /\.styl$/,
-        loader: 'style-loader!css-loader!stylus-loader',
-      },
     ],
-  },
+    module: {
+      loaders: [
+        {
+          test: /\.js$/,
+          loader: 'babel-loader',
+          exclude: /node_modules/,
+          query: {
+            presets: ['react', 'env'],
+          },
+        },
+        {
+          test: /\.json$/,
+          loader: 'json-loader',
+        },
+        {
+          test: /\.styl$/,
+          loader: 'style-loader!css-loader!stylus-loader',
+        },
+      ],
+    },
+  };
 };
-
