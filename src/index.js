@@ -5,14 +5,15 @@ import classNames from 'classnames';
 import './styles.styl';
 
 export default class TimezonePicker extends React.Component {
-  componentWillMount() {
-    this.timezones = Object.keys(this.props.timezones);
+  constructor(props) {
+    super(props);
+    this.timezones = Object.keys(props.timezones);
 
     this.state = {
       open: false,
       focused: 0,
       filter: '',
-      value: this.getTimezone(this.props.defaultValue || this.props.value),
+      value: this.getTimezone(props.defaultValue || props.value),
     };
   }
 

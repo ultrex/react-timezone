@@ -493,25 +493,23 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var TimezonePicker = function (_React$Component) {
   _inherits(TimezonePicker, _React$Component);
 
-  function TimezonePicker() {
+  function TimezonePicker(props) {
     _classCallCheck(this, TimezonePicker);
 
-    return _possibleConstructorReturn(this, (TimezonePicker.__proto__ || Object.getPrototypeOf(TimezonePicker)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (TimezonePicker.__proto__ || Object.getPrototypeOf(TimezonePicker)).call(this, props));
+
+    _this.timezones = Object.keys(props.timezones);
+
+    _this.state = {
+      open: false,
+      focused: 0,
+      filter: '',
+      value: _this.getTimezone(props.defaultValue || props.value)
+    };
+    return _this;
   }
 
   _createClass(TimezonePicker, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      this.timezones = Object.keys(this.props.timezones);
-
-      this.state = {
-        open: false,
-        focused: 0,
-        filter: '',
-        value: this.getTimezone(this.props.defaultValue || this.props.value)
-      };
-    }
-  }, {
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
       if (nextProps.value !== this.props.value) {
