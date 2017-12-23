@@ -675,7 +675,8 @@ var TimezonePicker = function (_React$Component) {
             defaultValue: value,
             ref: function ref(field) {
               _this3.field = field;
-            }
+            },
+            autoComplete: 'off'
           }, inputProps))
         ),
         _react2.default.createElement(

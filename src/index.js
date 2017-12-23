@@ -152,6 +152,7 @@ export default class TimezonePicker extends React.Component {
             ref={(field) => {
               this.field = field;
             }}
+            autoComplete="off"
             {...inputProps}
           />
         </div>
