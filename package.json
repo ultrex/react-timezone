@@ -1,6 +1,6 @@
 {
   "name": "react-timezone",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "React timezone picker",
   "main": "build/react-timezone.min.js",
   "scripts": {
