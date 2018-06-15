@@ -61,6 +61,8 @@
   <!-- <script src="../build/react-timezone.min.js"></script> -->
 
   <script>
+    console.log('Timezones:', ReactTimezone.timezones);
+
     class DemoApp extends React.Component {
       constructor(props) {
         super(props);
@@ -71,7 +73,7 @@
       handleChange(timezone) {
         console.log('New Timezone', timezone);
 
-        this.setState({ timezone: timezone });
+        this.setState({ timezone });
       }
 
       render() {

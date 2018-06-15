@@ -32,7 +32,7 @@ class TimezonePicker extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
     if (props.value !== (state.currentZone ? state.currentZone.name : '')) {
-      return timezones.find(zone => zone.name === props.value);
+      return { currentZone: timezones.find(zone => zone.name === props.value) };
     }
     return null;
   }
