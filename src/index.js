@@ -6,6 +6,7 @@ import timezones from './timezones';
 class TimezonePicker extends React.Component {
   static propTypes = {
     value: PropTypes.string,
+    offset: PropTypes.oneOf(['GMT', 'UTC']),
     onChange: PropTypes.func.isRequired,
     className: PropTypes.string,
     style: PropTypes.shape({}),
@@ -19,6 +20,7 @@ class TimezonePicker extends React.Component {
 
   static defaultProps = {
     value: '',
+    offset: 'GMT',
     className: '',
     style: {},
     inputProps: {},
@@ -37,10 +39,10 @@ class TimezonePicker extends React.Component {
     return null;
   }
 
-  stringifyZone(zone) {
+  stringifyZone(zone, offset) {
     const ensure2Digits = num => (num > 9 ? `${num}` : `0${num}`);
 
-    return `(GMT${zone.offset < 0 ? '-' : '+'}${ensure2Digits(Math.floor(Math.abs(zone.offset)))}:${ensure2Digits(Math.abs((zone.offset % 1) * 60))}) ${zone.label}`;
+    return `(${offset}${zone.offset < 0 ? '-' : '+'}${ensure2Digits(Math.floor(Math.abs(zone.offset)))}:${ensure2Digits(Math.abs((zone.offset % 1) * 60))}) ${zone.label}`;
   }
 
   timezones() {
@@ -107,7 +109,7 @@ class TimezonePicker extends React.Component {
   };
 
   render() {
-    const { inputProps } = this.props;
+    const { offset, inputProps } = this.props;
     const { currentZone, focus, query } = this.state;
 
     const open = focus !== null;
@@ -122,7 +124,7 @@ class TimezonePicker extends React.Component {
           onBlur={this.handleBlur}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
-          value={currentZone && !open ? this.stringifyZone(currentZone) : query}
+          value={currentZone && !open ? this.stringifyZone(currentZone, offset) : query}
           ref={(input) => {
             this.input = input;
           }}
@@ -138,7 +140,7 @@ class TimezonePicker extends React.Component {
                 onFocus={() => this.handleItemHover(index)}
                 className={focus === index ? 'focus' : ''}
               >
-                {this.stringifyZone(zone)}
+                {this.stringifyZone(zone, offset)}
               </button>
             </li>
           ))}
