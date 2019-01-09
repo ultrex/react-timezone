@@ -81,17 +81,44 @@ class TimezonePicker extends React.Component {
 
   handleKeyDown = (e) => {
     if (e.key === 'ArrowDown') {
+      e.stopPropagation();
+      e.preventDefault();
+
+      const ulElement = e.currentTarget.parentElement.querySelector('ul');
       const zones = this.timezones();
-      this.setState(state => ({ focus: state.focus === zones.length ? 0 : state.focus + 1 }));
+      this.setState((state) => {
+        const focus = state.focus === zones.length - 1 ? 0 : state.focus + 1;
+
+        this.scrollToElement(ulElement.children[focus]);
+
+        return { focus };
+      });
     } else if (e.key === 'ArrowUp') {
+      e.stopPropagation();
+      e.preventDefault();
+
+      const ulElement = e.currentTarget.parentElement.querySelector('ul');
       const zones = this.timezones();
-      this.setState(state => ({ focus: state.focus === 0 ? zones.length - 1 : state.focus - 1 }));
+      this.setState((state) => {
+        const focus = state.focus === 0 ? zones.length - 1 : state.focus - 1;
+
+        this.scrollToElement(ulElement.children[focus]);
+
+        return { focus };
+      });
     } else if (e.key === 'Escape' && this.input) {
+      e.stopPropagation();
+      e.preventDefault();
+
       this.input.blur();
     } else if (e.key === 'Enter') {
+      e.stopPropagation();
+      e.preventDefault();
+      e.currentTarget.blur();
+
       const zones = this.timezones();
       if (zones[this.state.focus]) {
-        this.handleZoneChange(zones[this.state.focus]);
+        this.handleChangeZone(zones[this.state.focus]);
       }
     }
 
@@ -100,13 +127,31 @@ class TimezonePicker extends React.Component {
     }
   };
 
-  handleItemHover = (index) => {
+  handleHoverItem = (index) => {
     this.setState({ focus: index });
   };
 
-  handleZoneChange = (zone) => {
+  handleChangeZone = (zone) => {
     this.props.onChange(zone.name);
   };
+
+  scrollToElement = (element) => {
+    const ulElement = element.parentElement;
+
+    const topDifference = element.offsetTop - ulElement.scrollTop;
+    const bottomDifference = (ulElement.clientHeight + ulElement.scrollTop) -
+      (element.offsetTop + element.offsetHeight);
+
+    if (topDifference < 0) {
+      // Scroll top
+      ulElement.scrollTop = element.offsetTop;
+    }
+
+    if (bottomDifference < 0) {
+      // Scroll bottom
+      ulElement.scrollTop -= bottomDifference;
+    }
+  }
 
   render() {
     const { offset, inputProps } = this.props;
@@ -135,9 +180,9 @@ class TimezonePicker extends React.Component {
             <li key={zone.name}>
               <button
                 title={zone.label}
-                onMouseDown={() => this.handleZoneChange(zone)}
-                onMouseOver={() => this.handleItemHover(index)}
-                onFocus={() => this.handleItemHover(index)}
+                onMouseDown={() => this.handleChangeZone(zone)}
+                onMouseOver={() => this.handleHoverItem(index)}
+                onFocus={() => this.handleHoverItem(index)}
                 className={focus === index ? 'focus' : ''}
               >
                 {this.stringifyZone(zone, offset)}
