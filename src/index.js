@@ -42,7 +42,9 @@ class TimezonePicker extends React.Component {
   stringifyZone(zone, offset) {
     const ensure2Digits = num => (num > 9 ? `${num}` : `0${num}`);
 
-    return `(${offset}${zone.offset < 0 ? '-' : '+'}${ensure2Digits(Math.floor(Math.abs(zone.offset)))}:${ensure2Digits(Math.abs((zone.offset % 1) * 60))}) ${zone.label}`;
+    return `(${offset}${zone.offset < 0 ? '-' : '+'}${ensure2Digits(
+      Math.floor(Math.abs(zone.offset)),
+    )}:${ensure2Digits(Math.abs((zone.offset % 1) * 60))}) ${zone.label}`;
   }
 
   timezones() {
@@ -52,10 +54,11 @@ class TimezonePicker extends React.Component {
       zone.label
         .toLowerCase()
         .replace(/\s+/g, '')
-        .includes(this.state.query.toLowerCase().replace(/\s+/g, '')));
+        .includes(this.state.query.toLowerCase().replace(/\s+/g, '')),
+    );
   }
 
-  handleFocus = (e) => {
+  handleFocus = e => {
     this.setState({ focus: 0 });
 
     if (this.props.inputProps.onFocus) {
@@ -63,7 +66,7 @@ class TimezonePicker extends React.Component {
     }
   };
 
-  handleBlur = (e) => {
+  handleBlur = e => {
     this.setState({ focus: null, query: '' });
 
     if (this.props.inputProps.onBlur) {
@@ -71,7 +74,7 @@ class TimezonePicker extends React.Component {
     }
   };
 
-  handleChange = (e) => {
+  handleChange = e => {
     this.setState({ query: e.currentTarget.value, focus: 0 });
 
     if (this.props.inputProps.onChange) {
@@ -79,14 +82,14 @@ class TimezonePicker extends React.Component {
     }
   };
 
-  handleKeyDown = (e) => {
+  handleKeyDown = e => {
     if (e.key === 'ArrowDown') {
       e.stopPropagation();
       e.preventDefault();
 
       const ulElement = e.currentTarget.parentElement.querySelector('ul');
       const zones = this.timezones();
-      this.setState((state) => {
+      this.setState(state => {
         const focus = state.focus === zones.length - 1 ? 0 : state.focus + 1;
 
         this.scrollToElement(ulElement.children[focus]);
@@ -99,7 +102,7 @@ class TimezonePicker extends React.Component {
 
       const ulElement = e.currentTarget.parentElement.querySelector('ul');
       const zones = this.timezones();
-      this.setState((state) => {
+      this.setState(state => {
         const focus = state.focus === 0 ? zones.length - 1 : state.focus - 1;
 
         this.scrollToElement(ulElement.children[focus]);
@@ -127,20 +130,24 @@ class TimezonePicker extends React.Component {
     }
   };
 
-  handleHoverItem = (index) => {
+  handleHoverItem = index => {
+    if (index === this.state.focus) return;
+
     this.setState({ focus: index });
   };
 
-  handleChangeZone = (zone) => {
+  handleChangeZone = zone => {
     this.props.onChange(zone.name);
+
+    this.input.blur();
   };
 
-  scrollToElement = (element) => {
+  scrollToElement = element => {
     const ulElement = element.parentElement;
 
     const topDifference = element.offsetTop - ulElement.scrollTop;
-    const bottomDifference = (ulElement.clientHeight + ulElement.scrollTop) -
-      (element.offsetTop + element.offsetHeight);
+    const bottomDifference =
+      ulElement.clientHeight + ulElement.scrollTop - (element.offsetTop + element.offsetHeight);
 
     if (topDifference < 0) {
       // Scroll top
@@ -151,7 +158,7 @@ class TimezonePicker extends React.Component {
       // Scroll bottom
       ulElement.scrollTop -= bottomDifference;
     }
-  }
+  };
 
   render() {
     const { offset, inputProps } = this.props;
@@ -170,7 +177,7 @@ class TimezonePicker extends React.Component {
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
           value={currentZone && !open ? this.stringifyZone(currentZone, offset) : query}
-          ref={(input) => {
+          ref={input => {
             this.input = input;
           }}
         />
@@ -223,6 +230,9 @@ class TimezonePicker extends React.Component {
               border-radius: 0 0 3px 3px;
               display: none;
             }
+            li {
+              display: block;
+            }
             button {
               color: #444;
               padding: 5px 12px;
@@ -234,12 +244,16 @@ class TimezonePicker extends React.Component {
               text-align: left;
               border-radius: 0;
               font: inherit;
+              background: transparent;
             }
             button.focus {
               background: #f0f0f0;
             }
             ul.open {
               display: block;
+            }
+            input::-ms-clear {
+              display: none;
             }
           `}
         </style>
